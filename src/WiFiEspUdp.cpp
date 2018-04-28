@@ -22,10 +22,9 @@ along with The Arduino WiFiEsp library.  If not, see
 #include "util/EspDrv.h"
 #include "util/debug.h"
 
-/* Constructor */
+
 WiFiEspUDP::WiFiEspUDP() : _sock(NO_SOCKET_AVAIL) {}
 
-/* Start WiFiUDP socket, listening at local port PORT */
 uint8_t WiFiEspUDP::begin(uint16_t port) {
     uint8_t sock = WiFiEspClass::getFreeSocket();
     if (sock != NO_SOCKET_AVAIL) {
@@ -37,12 +36,10 @@ uint8_t WiFiEspUDP::begin(uint16_t port) {
         _port = port;
         return 1;
     }
-    return 0;
 
+    return 0;
 }
 
-/* return number of bytes available in the current packet,
-   will return zero if parsePacket hasn't been called yet */
 int WiFiEspUDP::available() {
     if (_sock != NO_SOCKET_AVAIL) {
         int bytes = EspDrv::availData(_sock);
@@ -54,12 +51,10 @@ int WiFiEspUDP::available() {
     return 0;
 }
 
-/* Release any resources being used by this WiFiUDP instance */
 void WiFiEspUDP::stop() {
     if (_sock == NO_SOCKET_AVAIL)
         return;
 
-    // Discard data that might be in the incoming buffer
     flush();
 
     // Stop the listener and return the socket to the pool
@@ -80,6 +75,7 @@ int WiFiEspUDP::beginPacket(const char *host, uint16_t port) {
         WiFiEspClass::allocateSocket(_sock);
         return 1;
     }
+
     return 0;
 }
 
@@ -128,6 +124,7 @@ int WiFiEspUDP::read() {
 int WiFiEspUDP::read(uint8_t *buf, size_t size) {
     if (!available())
         return -1;
+
     return EspDrv::getDataBuf(_sock, buf, size);
 }
 
@@ -140,15 +137,14 @@ int WiFiEspUDP::peek() {
 }
 
 void WiFiEspUDP::flush() {
-    // Discard all input data
-    int count = available();
-    while (count-- > 0)
+    while (available())
         read();
 }
 
 IPAddress WiFiEspUDP::remoteIP() {
     IPAddress ret;
     EspDrv::getRemoteIpAddress(ret);
+
     return ret;
 }
 

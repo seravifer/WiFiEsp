@@ -22,12 +22,12 @@ along with The Arduino WiFiEsp library.  If not, see
 #include "util/debug.h"
 
 
-WiFiEspServer::WiFiEspServer(uint16_t port) {
-    _port = port;
-}
+WiFiEspServer::WiFiEspServer() {}
 
-void WiFiEspServer::begin() {
+void WiFiEspServer::begin(uint16_t port) {
     LOGDEBUG(F("Starting server"));
+
+    _port = port;
 
     /* The ESP Module only allows socket 1 to be used for the server */
 #if 0
@@ -62,7 +62,7 @@ WiFiEspClient WiFiEspServer::available(byte *status) {
         return client;
     }
 
-    return WiFiEspClient(255);
+    return {255};
 }
 
 uint8_t WiFiEspServer::status() {
@@ -82,5 +82,6 @@ size_t WiFiEspServer::write(const uint8_t *buffer, size_t size) {
             n += client.write(buffer, size);
         }
     }
+
     return n;
 }

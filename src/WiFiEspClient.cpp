@@ -26,45 +26,10 @@ along with The Arduino WiFiEsp library.  If not, see
 #include "util/debug.h"
 
 
-WiFiEspClient::WiFiEspClient() : _sock(255) {
+WiFiEspClient::WiFiEspClient() : _sock(255) {}
 
-}
+WiFiEspClient::WiFiEspClient(uint8_t sock) : _sock(sock) {}
 
-WiFiEspClient::WiFiEspClient(uint8_t sock) : _sock(sock) {
-
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Overrided Print methods
-////////////////////////////////////////////////////////////////////////////////
-
-// the standard print method will call write for each character in the buffer
-// this is very slow on ESP
-size_t WiFiEspClient::print(const __FlashStringHelper *ifsh) {
-    printFSH(ifsh, false);
-}
-
-// if we do override this, the standard println will call the print
-// method twice
-size_t WiFiEspClient::println(const __FlashStringHelper *ifsh) {
-    printFSH(ifsh, true);
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Implementation of Client virtual methods
-////////////////////////////////////////////////////////////////////////////////
-
-int WiFiEspClient::connectSSL(const char *host, uint16_t port) {
-    return connect(host, port, SSL_MODE);
-}
-
-int WiFiEspClient::connectSSL(IPAddress ip, uint16_t port) {
-    char s[16];
-    sprintf_P(s, PSTR("%d.%d.%d.%d"), ip[0], ip[1], ip[2], ip[3]);
-    return connect(s, port, SSL_MODE);
-}
 
 int WiFiEspClient::connect(const char *host, uint16_t port) {
     return connect(host, port, TCP_MODE);
@@ -77,7 +42,17 @@ int WiFiEspClient::connect(IPAddress ip, uint16_t port) {
     return connect(s, port, TCP_MODE);
 }
 
-/* Private method */
+int WiFiEspClient::connectSSL(const char *host, uint16_t port) {
+    return connect(host, port, SSL_MODE);
+}
+
+int WiFiEspClient::connectSSL(IPAddress ip, uint16_t port) {
+    char s[16];
+    sprintf_P(s, PSTR("%d.%d.%d.%d"), ip[0], ip[1], ip[2], ip[3]);
+    return connect(s, port, SSL_MODE);
+}
+
+// Private method
 int WiFiEspClient::connect(const char *host, uint16_t port, uint8_t protMode) {
     LOGINFO1(F("Connecting to"), host);
 
@@ -166,12 +141,10 @@ int WiFiEspClient::peek() {
     return b;
 }
 
-
 void WiFiEspClient::flush() {
     while (available())
         read();
 }
-
 
 void WiFiEspClient::stop() {
     if (_sock == 255)
@@ -185,20 +158,9 @@ void WiFiEspClient::stop() {
     _sock = 255;
 }
 
-
 uint8_t WiFiEspClient::connected() {
     return (status() == ESTABLISHED);
 }
-
-
-WiFiEspClient::operator bool() {
-    return _sock != 255;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Additional WiFi standard methods
-////////////////////////////////////////////////////////////////////////////////
 
 uint8_t WiFiEspClient::status() {
     if (_sock == 255) {
@@ -225,11 +187,28 @@ IPAddress WiFiEspClient::remoteIP() {
     return ret;
 }
 
+WiFiEspClient::operator bool() {
+    return _sock != 255;
+}
 
-////////////////////////////////////////////////////////////////////////////////
-// Private Methods
-////////////////////////////////////////////////////////////////////////////////
 
+// Overrided Print methods
+// needed to correctly handle overriding
+// see http://stackoverflow.com/questions/888235/overriding-a-bases-overloaded-function-in-c
+// the standard print method will call write for each character in the buffer
+// this is very slow on ESP
+size_t WiFiEspClient::print(const __FlashStringHelper *ifsh) {
+    printFSH(ifsh, false);
+}
+
+// if we do override this, the standard println will call the print
+// method twice
+size_t WiFiEspClient::println(const __FlashStringHelper *ifsh) {
+    printFSH(ifsh, true);
+}
+
+
+// Private
 size_t WiFiEspClient::printFSH(const __FlashStringHelper *ifsh, bool appendCrLf) {
     size_t size = strlen_P((char *) ifsh);
 

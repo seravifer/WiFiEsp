@@ -19,16 +19,12 @@ along with The Arduino WiFiEsp library.  If not, see
 #include "WiFiEsp.h"
 
 
-int16_t    WiFiEspClass::_state[MAX_SOCK_NUM] = {NA_STATE, NA_STATE, NA_STATE, NA_STATE};
-uint16_t    WiFiEspClass::_server_port[MAX_SOCK_NUM] = {0, 0, 0, 0};
-
+int16_t WiFiEspClass::_state[MAX_SOCK_NUM] = {NA_STATE, NA_STATE, NA_STATE, NA_STATE};
+uint16_t WiFiEspClass::_server_port[MAX_SOCK_NUM] = {0, 0, 0, 0};
 
 uint8_t WiFiEspClass::espMode = 0;
 
-
-WiFiEspClass::WiFiEspClass() {
-
-}
+WiFiEspClass::WiFiEspClass() {}
 
 void WiFiEspClass::init(Stream *espSerial) {
     LOGINFO(F("Initializing ESP module"));
@@ -68,7 +64,6 @@ int WiFiEspClass::beginAP(const char *ssid, uint8_t channel) {
     return beginAP(ssid, channel, "", 0);
 }
 
-
 void WiFiEspClass::config(IPAddress ip) {
     EspDrv::config(ip);
 }
@@ -76,7 +71,6 @@ void WiFiEspClass::config(IPAddress ip) {
 void WiFiEspClass::configAP(IPAddress ip) {
     EspDrv::configAP(ip);
 }
-
 
 int WiFiEspClass::disconnect() {
     return EspDrv::disconnect();
@@ -112,7 +106,6 @@ IPAddress WiFiEspClass::gatewayIP() {
     return gw;
 }
 
-
 char *WiFiEspClass::SSID() {
     return EspDrv::getCurrentSSID();
 }
@@ -127,7 +120,6 @@ uint8_t *WiFiEspClass::BSSID(uint8_t *bssid) {
 int32_t WiFiEspClass::RSSI() {
     return EspDrv::getCurrentRSSI();
 }
-
 
 int8_t WiFiEspClass::scanNetworks() {
     return EspDrv::getScanNetworks();
@@ -145,17 +137,12 @@ uint8_t WiFiEspClass::encryptionType(uint8_t networkItem) {
     return EspDrv::getEncTypeNetowrks(networkItem);
 }
 
-
 uint8_t WiFiEspClass::status() {
     return EspDrv::getConnectionStatus();
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Non standard methods
-////////////////////////////////////////////////////////////////////////////
-
-void WiFiEspClass::reset(void) {
+void WiFiEspClass::reset() {
     EspDrv::reset();
 }
 

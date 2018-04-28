@@ -63,7 +63,7 @@ typedef enum {
     WL_SUCCESS = 1,
 } wl_error_code_t;
 
-/* Authentication modes */
+// Authentication modes
 enum wl_auth_mode {
     AUTH_MODE_INVALID,
     AUTH_MODE_AUTO,
@@ -86,7 +86,7 @@ typedef enum {
     WL_DISCONNECTED
 } wl_status_t;
 
-/* Encryption modes */
+// Encryption modes
 enum wl_enc_type {
     ENC_TYPE_NONE = 0,
     ENC_TYPE_WEP = 1,
@@ -116,50 +116,50 @@ public:
 
     static void wifiDriverInit(Stream *espSerial);
 
-    /* Start Wifi connection with passphrase
+    /**
+     * Start Wifi connection with passphrase
      *
      * param ssid: Pointer to the SSID string.
      * param passphrase: Passphrase. Valid characters in a passphrase must be between ASCII 32-126 (decimal).
      */
     static bool wifiConnect(const char *ssid, const char *passphrase);
 
-    /*
+    /**
 	* Start the Access Point
 	*/
     static bool wifiStartAP(const char *ssid, const char *pwd, uint8_t channel, uint8_t enc, uint8_t espMode);
 
-    /*
+    /**
 	 * Set ip configuration disabling dhcp client
 	 */
     static void config(IPAddress local_ip);
 
-    /*
+    /**
 	 * Set ip configuration disabling dhcp client
 	 */
     static void configAP(IPAddress local_ip);
 
-    /*
+    /**
      * Disconnect from the network
      *
      * return: WL_SUCCESS or WL_FAILURE
      */
     static int8_t disconnect();
 
-    /*
-     *
+    /**
      *
      * return: one value of wl_status_t enum
      */
     static uint8_t getConnectionStatus();
 
-    /*
+    /**
      * Get the interface MAC address.
      *
      * return: pointer to uint8_t array with length WL_MAC_ADDR_LENGTH
      */
     static uint8_t *getMacAddress();
 
-    /*
+    /**
      * Get the interface IP address.
      *
      * return: copy the ip address value in IPAddress object
@@ -168,7 +168,7 @@ public:
 
     static void getIpAddressAP(IPAddress &ip);
 
-    /*
+    /**
      * Get the interface IP netmask.
      * This can be used to retrieve settings configured through DHCP.
      *
@@ -176,7 +176,7 @@ public:
      */
     static bool getNetmask(IPAddress &mask);
 
-    /*
+    /**
      * Get the interface IP gateway.
      * This can be used to retrieve settings configured through DHCP.
      *
@@ -184,14 +184,14 @@ public:
      */
     static bool getGateway(IPAddress &mask);
 
-    /*
+    /**
      * Return the current SSID associated with the network
      *
      * return: ssid string
      */
     static char *getCurrentSSID();
 
-    /*
+    /**
      * Return the current BSSID associated with the network.
      * It is the MAC address of the Access Point
      *
@@ -199,7 +199,7 @@ public:
      */
     static uint8_t *getCurrentBSSID();
 
-    /*
+    /**
      * Return the current RSSI /Received Signal Strength in dBm)
      * associated with the network
      *
@@ -207,14 +207,14 @@ public:
      */
     static int32_t getCurrentRSSI();
 
-    /*
+    /**
      * Get the networks available
      *
      * return: Number of discovered networks
      */
     static uint8_t getScanNetworks();
 
-    /*
+    /**
      * Return the SSID discovered during the network scan.
      *
      * param networkItem: specify from which network item want to get the information
@@ -223,7 +223,7 @@ public:
      */
     static char *getSSIDNetoworks(uint8_t networkItem);
 
-    /*
+    /**
      * Return the RSSI of the networks discovered during the scanNetworks
      *
      * param networkItem: specify from which network item want to get the information
@@ -232,7 +232,7 @@ public:
      */
     static int32_t getRSSINetoworks(uint8_t networkItem);
 
-    /*
+    /**
      * Return the encryption type of the networks discovered during the scanNetworks
      *
      * param networkItem: specify from which network item want to get the information
@@ -242,7 +242,7 @@ public:
     static uint8_t getEncTypeNetowrks(uint8_t networkItem);
 
 
-    /*
+    /**
      * Get the firmware version
      */
     static char *getFwVersion();

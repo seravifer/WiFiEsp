@@ -37,64 +37,68 @@ Most of the standard Arduino WiFi library methods are available. Refer to the [W
 
 ### WiFiEsp class
 
-- begin() - Not all authentication types
-- disconnect() - YES
-- config()
-- setDNS() - NO (no AT command available)
-- SSID() - YES
-- BSSID() - YES
-- RSSI() - YES
-- encryptionType() - NO (no AT command available)
-- scanNetworks() - YES
-- getSocket()
-- macAddress() - YES
+- [x] init()
+- [x] firmwareVersion()
+- [x] begin() - Not all authentication types
+- [ ] config()
+- [x] disconnect()
+- [ ] setDNS() No AT command available
+- [x] SSID() 
+- [x] BSSID() 
+- [x] RSSI() 
+- [ ] encryptionType() - No AT command available
+- [x] scanNetworks() 
+- [ ] getSocket()
+- [x] macAddress() 
 
 
 ### WiFiEspServer class
 
 The WiFiEspServer class creates servers which can send data to and receive data from connected clients (programs running on other computers or devices).
 
-- WiFiEspServer() - YES
-- begin() - YES
-- available() - YES
-- write() - YES
-- print() - YES
-- println() - YES
+- [x] WiFiEspServer() 
+- [x] begin() 
+- [x] available() 
+- [x] write() 
+- [x] print()
 
 
 ### Client class
 
 The WiFiEspClient class creates clients that can connect to servers and send and receive data.
 
-- WiFiEspClient() - YES
-- connected() - YES
-- connect() - YES
-- write() - YES
-- print() - YES
-- println() - YES
-- available() - YES
-- read() - YES
-- flush() - YES
-- stop() - YES
+- [x] WiFiEspClient() 
+- [x] connect()
+- [ ] connectSSL()
+- [x] write() 
+- [x] available()
+- [x] connected()
+- [x] read() 
+- [x] peek() 
+- [x] flush() 
+- [x] stop()
+- [x] print() 
+- [x] println() 
 
 
 ### WiFiEspUDP class
 
 The UDP class enables UDP message to be sent and received.
 
-- WiFiUDP - YES
-- begin() - YES
-- available() - YES
-- beginPacket() - YES
-- endPacket() - YES
-- write() - YES
-- parsePacket() - YES
-- peek()
-- read() - YES
-- flush()
-- stop()
-- remoteIP() - YES
-- remotePort() - YES
+- [x] WiFiUDP
+- [x] begin()
+- [x] available()
+- [x] beginPacket()
+- [x] endPacket()
+- [x] write()
+- [x] parsePacket()
+- [ ] peek()
+- [x] read()
+- [x] flush() 
+- [x] stop()
+- [x] remoteIP()
+- [x] remotePort()
+- [x] print()
 
 
 ## Contributing

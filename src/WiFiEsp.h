@@ -24,7 +24,6 @@ along with The Arduino WiFiEsp library.  If not, see
 #include <IPAddress.h>
 #include <inttypes.h>
 
-
 #include "WiFiEspClient.h"
 #include "WiFiEspServer.h"
 #include "util/EspDrv.h"
@@ -34,12 +33,21 @@ along with The Arduino WiFiEsp library.  If not, see
 
 class WiFiEspClass {
 
+private:
+    static uint8_t getFreeSocket();
+
+    static void allocateSocket(uint8_t sock);
+
+    static void releaseSocket(uint8_t sock);
+
+    static uint8_t espMode;
+
+
 public:
+    WiFiEspClass();
 
     static int16_t _state[MAX_SOCK_NUM];
     static uint16_t _server_port[MAX_SOCK_NUM];
-
-    WiFiEspClass();
 
 
     /**
@@ -49,19 +57,10 @@ public:
     */
     static void init(Stream *espSerial);
 
-
     /**
     * Get firmware version
     */
     static char *firmwareVersion();
-
-
-    // NOT IMPLEMENTED
-    //int begin(char* ssid);
-
-    // NOT IMPLEMENTED
-    //int begin(char* ssid, uint8_t key_idx, const char* key);
-
 
     /**
     * Start Wifi connection with passphrase
@@ -73,6 +72,11 @@ public:
     */
     int begin(const char *ssid, const char *passphrase);
 
+    // NOT IMPLEMENTED
+    //int begin(char* ssid);
+
+    // NOT IMPLEMENTED
+    //int begin(char* ssid, uint8_t key_idx, const char* key);
 
     /**
     * Change Ip configuration settings disabling the DHCP client
@@ -80,7 +84,6 @@ public:
     * param local_ip:	Static ip configuration
     */
     void config(IPAddress local_ip);
-
 
     // NOT IMPLEMENTED
     //void config(IPAddress local_ip, IPAddress dns_server);
@@ -102,7 +105,7 @@ public:
     *
     * return: one value of wl_status_t enum
     */
-    int disconnect(void);
+    int disconnect();
 
     /**
     * Get the interface MAC address.
@@ -117,7 +120,6 @@ public:
     * return: Ip address value
     */
     IPAddress localIP();
-
 
     /**
     * Get the interface subnet mask address.
@@ -148,7 +150,6 @@ public:
     */
     uint8_t *BSSID(uint8_t *bssid);
 
-
     /**
     * Return the current RSSI /Received Signal Strength in dBm)
     * associated with the network
@@ -156,7 +157,6 @@ public:
     * return: signed value
     */
     int32_t RSSI();
-
 
     /**
     * Return Connection status.
@@ -166,22 +166,21 @@ public:
     */
     uint8_t status();
 
-
-    /*
+    /**
       * Return the Encryption Type associated with the network
       *
       * return: one value of wl_enc_type enum
       */
     //uint8_t	encryptionType();
 
-    /*
+    /**
      * Start scan WiFi networks available
      *
      * return: Number of discovered networks
      */
     int8_t scanNetworks();
 
-    /*
+    /**
      * Return the SSID discovered during the network scan.
      *
      * param networkItem: specify from which network item want to get the information
@@ -190,7 +189,7 @@ public:
      */
     char *SSID(uint8_t networkItem);
 
-    /*
+    /**
      * Return the encryption type of the networks discovered during the scanNetworks
      *
      * param networkItem: specify from which network item want to get the information
@@ -199,7 +198,7 @@ public:
      */
     uint8_t encryptionType(uint8_t networkItem);
 
-    /*
+    /**
      * Return the RSSI of the networks discovered during the scanNetworks
      *
      * param networkItem: specify from which network item want to get the information
@@ -208,15 +207,8 @@ public:
      */
     int32_t RSSI(uint8_t networkItem);
 
-
     // NOT IMPLEMENTED
     //int hostByName(const char* aHostname, IPAddress& aResult);
-
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    // Non standard methods
-    ////////////////////////////////////////////////////////////////////////////
 
     /**
     * Start the ESP access point.
@@ -230,9 +222,9 @@ public:
     */
     int beginAP(const char *ssid, uint8_t channel, const char *pwd, uint8_t enc, bool apOnly = true);
 
-    /*
-    * Start the ESP access point with open security.
-    */
+    /**
+     * Start the ESP access point with open security.
+     */
     int beginAP(const char *ssid);
 
     int beginAP(const char *ssid, uint8_t channel);
@@ -244,15 +236,14 @@ public:
     */
     void configAP(IPAddress ip);
 
-
     /**
-    * Restart the ESP module.
-    */
+     * Restart the ESP module.
+     */
     void reset();
 
     /**
-    * Ping a host.
-    */
+     * Ping a host.
+     */
     bool ping(const char *host);
 
 
@@ -262,14 +253,6 @@ public:
 
     friend class WiFiEspUDP;
 
-private:
-    static uint8_t getFreeSocket();
-
-    static void allocateSocket(uint8_t sock);
-
-    static void releaseSocket(uint8_t sock);
-
-    static uint8_t espMode;
 };
 
 extern WiFiEspClass WiFi;
