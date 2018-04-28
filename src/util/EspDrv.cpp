@@ -642,14 +642,11 @@ uint16_t EspDrv::availData(uint8_t connId) {
     return 0;
 }
 
-
 bool EspDrv::getData(uint8_t connId, uint8_t *data, bool peek, bool *connClose) {
     if (connId != _connId)
         return false;
 
-
     // see Serial.timedRead
-
     long _startMillis = millis();
     do {
         if (espSerial->available()) {
@@ -724,7 +721,6 @@ int EspDrv::getDataBuf(uint8_t connId, uint8_t *buf, uint16_t bufSize) {
 
     return bufSize;
 }
-
 
 bool EspDrv::sendData(uint8_t sock, const uint8_t *data, uint16_t len) {
     LOGDEBUG2(F("> sendData:"), sock, len);

@@ -22,26 +22,21 @@ along with The Arduino WiFiEsp library.  If not, see
 #include "util/debug.h"
 
 
-WiFiEspServer::WiFiEspServer() {}
+WiFiEspServer::WiFiEspServer(uint16_t port) {
+    _port = port;
+}
 
 void WiFiEspServer::begin(uint16_t port) {
     LOGDEBUG(F("Starting server"));
 
-    _port = port;
-
-    /* The ESP Module only allows socket 1 to be used for the server */
-#if 0
+    // The ESP Module only allows socket 1 to be used for the server
     _sock = WiFiEspClass::getFreeSocket();
-    if (_sock == SOCK_NOT_AVAIL)
-      {
+    if (_sock == SOCK_NOT_AVAIL) {
         LOGERROR(F("No socket available for server"));
         return;
-      }
-#else
-    _sock = 1; // If this is already in use, the startServer attempt will fail
-#endif
-    WiFiEspClass::allocateSocket(_sock);
+    }
 
+    WiFiEspClass::allocateSocket(_sock);
     _started = EspDrv::startServer(_port, _sock);
 
     if (_started) {
@@ -51,10 +46,10 @@ void WiFiEspServer::begin(uint16_t port) {
     }
 }
 
+// TODO the original method seems to handle automatic server restart
 WiFiEspClient WiFiEspServer::available(byte *status) {
-    // TODO the original method seems to handle automatic server restart
-
     int bytes = EspDrv::availData(0);
+
     if (bytes > 0) {
         LOGINFO1("New client", EspDrv::_connId);
         WiFiEspClass::allocateSocket(EspDrv::_connId);

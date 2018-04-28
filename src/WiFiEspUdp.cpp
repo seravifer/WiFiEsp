@@ -131,7 +131,14 @@ int WiFiEspUDP::peek() {
     if (!available())
         return -1;
 
-    //EspDrv::getData(_sock, &b, 1);
+    bool connClose = false;
+    EspDrv::getData(_sock, &b, true, &connClose);
+
+    if (connClose) {
+        WiFiEspClass::releaseSocket(_sock);
+        _sock = 255;
+    }
+
     return b;
 }
 

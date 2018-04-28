@@ -49,10 +49,10 @@ int WiFiEspClient::connectSSL(const char *host, uint16_t port) {
 int WiFiEspClient::connectSSL(IPAddress ip, uint16_t port) {
     char s[16];
     sprintf_P(s, PSTR("%d.%d.%d.%d"), ip[0], ip[1], ip[2], ip[3]);
+
     return connect(s, port, SSL_MODE);
 }
 
-// Private method
 int WiFiEspClient::connect(const char *host, uint16_t port, uint8_t protMode) {
     LOGINFO1(F("Connecting to"), host);
 
@@ -67,6 +67,7 @@ int WiFiEspClient::connect(const char *host, uint16_t port, uint8_t protMode) {
         LOGERROR(F("No socket available"));
         return 0;
     }
+
     return 1;
 }
 
@@ -80,8 +81,8 @@ size_t WiFiEspClient::write(const uint8_t *buf, size_t size) {
         return 0;
     }
 
-    bool r = EspDrv::sendData(_sock, buf, size);
-    if (!r) {
+    bool result = EspDrv::sendData(_sock, buf, size);
+    if (!result) {
         setWriteError();
         LOGERROR1("Failed to write to socket", _sock);
         delay(4000);
@@ -159,7 +160,7 @@ void WiFiEspClient::stop() {
 }
 
 uint8_t WiFiEspClient::connected() {
-    return (status() == ESTABLISHED);
+    return status() == ESTABLISHED;
 }
 
 uint8_t WiFiEspClient::status() {

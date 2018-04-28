@@ -42,7 +42,7 @@ Most of the standard Arduino WiFi library methods are available. Refer to the [W
 - [x] begin() - Not all authentication types
 - [ ] config()
 - [x] disconnect()
-- [ ] setDNS() No AT command available
+- [ ] setDNS()
 - [x] SSID() 
 - [x] BSSID() 
 - [x] RSSI() 
@@ -60,7 +60,9 @@ The WiFiEspServer class creates servers which can send data to and receive data 
 - [x] begin() 
 - [x] available() 
 - [x] write() 
+- [x] status()
 - [x] print()
+- [x] println()
 
 
 ### Client class
@@ -78,21 +80,22 @@ The WiFiEspClient class creates clients that can connect to servers and send and
 - [x] flush() 
 - [x] stop()
 - [x] print() 
-- [x] println() 
+- [x] println()
+- [x] remoteIP()
 
 
 ### WiFiEspUDP class
 
 The UDP class enables UDP message to be sent and received.
 
-- [x] WiFiUDP
+- [x] WiFiUDP()
 - [x] begin()
 - [x] available()
 - [x] beginPacket()
-- [ ] endPacket() - No AT command
+- [x] endPacket() - No AT command
 - [x] write()
 - [x] parsePacket()
-- [ ] peek() - No AT command
+- [x] peek()
 - [x] read()
 - [x] flush() 
 - [x] stop()

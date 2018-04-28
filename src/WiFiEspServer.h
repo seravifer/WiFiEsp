@@ -35,18 +35,10 @@ private:
 
 
 public:
-    WiFiEspServer();
+    WiFiEspServer(uint16_t);
 
-    /**
-     * Start the TCP server
-     */
     void begin(uint16_t port);
 
-    /**
-     * Gets a client that is connected to the server and has data available for reading.
-     * The connection persists when the returned client object goes out of scope; you can close it by calling client.stop().
-     * Returns a Client object; if no Client has data available for reading, this object will evaluate to false in an if-statement.
-     */
     WiFiEspClient available(uint8_t *status = NULL);
 
     uint8_t status();
