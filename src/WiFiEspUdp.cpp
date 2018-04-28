@@ -27,10 +27,11 @@ WiFiEspUDP::WiFiEspUDP() : _sock(NO_SOCKET_AVAIL) {}
 
 uint8_t WiFiEspUDP::begin(uint16_t port) {
     uint8_t sock = WiFiEspClass::getFreeSocket();
+
     if (sock != NO_SOCKET_AVAIL) {
         EspDrv::startClient("0", port, sock, UDP_MODE);
 
-        WiFiEspClass::allocateSocket(sock);  // allocating the socket for the listener
+        WiFiEspClass::allocateSocket(sock);
         WiFiEspClass::_server_port[sock] = port;
         _sock = sock;
         _port = port;
@@ -42,10 +43,7 @@ uint8_t WiFiEspUDP::begin(uint16_t port) {
 
 int WiFiEspUDP::available() {
     if (_sock != NO_SOCKET_AVAIL) {
-        int bytes = EspDrv::availData(_sock);
-        if (bytes > 0) {
-            return bytes;
-        }
+        return EspDrv::availData(_sock);
     }
 
     return 0;
@@ -95,8 +93,8 @@ size_t WiFiEspUDP::write(uint8_t byte) {
 }
 
 size_t WiFiEspUDP::write(const uint8_t *buffer, size_t size) {
-    bool r = EspDrv::sendDataUdp(_sock, _remoteHost, _remotePort, buffer, size);
-    if (!r) {
+    bool result = EspDrv::sendDataUdp(_sock, _remoteHost, _remotePort, buffer, size);
+    if (!result) {
         return 0;
     }
 
@@ -133,6 +131,7 @@ int WiFiEspUDP::peek() {
     if (!available())
         return -1;
 
+    //EspDrv::getData(_sock, &b, 1);
     return b;
 }
 

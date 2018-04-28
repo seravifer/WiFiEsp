@@ -89,16 +89,15 @@ The UDP class enables UDP message to be sent and received.
 - [x] begin()
 - [x] available()
 - [x] beginPacket()
-- [x] endPacket()
+- [ ] endPacket() - No AT command
 - [x] write()
 - [x] parsePacket()
-- [ ] peek()
+- [ ] peek() - No AT command
 - [x] read()
 - [x] flush() 
 - [x] stop()
 - [x] remoteIP()
 - [x] remotePort()
-- [x] print()
 
 
 ## Contributing

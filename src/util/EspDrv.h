@@ -119,8 +119,8 @@ public:
     /**
      * Start Wifi connection with passphrase
      *
-     * param ssid: Pointer to the SSID string.
-     * param passphrase: Passphrase. Valid characters in a passphrase must be between ASCII 32-126 (decimal).
+     * @param ssid: Pointer to the SSID string.
+     * @param passphrase: Passphrase. Valid characters in a passphrase must be between ASCII 32-126 (decimal).
      */
     static bool wifiConnect(const char *ssid, const char *passphrase);
 
@@ -248,11 +248,6 @@ public:
     static char *getFwVersion();
 
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Client/Server methods
-    ////////////////////////////////////////////////////////////////////////////
-
-
     static bool startServer(uint16_t port, uint8_t sock);
 
     static bool startClient(const char *host, uint16_t port, uint8_t sock, uint8_t protMode);
@@ -261,7 +256,7 @@ public:
 
     static uint8_t getServerState(uint8_t sock);
 
-    static uint8_t getClientState(uint8_t sock);
+    static bool getClientState(uint8_t sock);
 
     static bool getData(uint8_t connId, uint8_t *data, bool peek, bool *connClose);
 
@@ -284,8 +279,6 @@ public:
 
     static uint16_t getRemotePort();
 
-
-////////////////////////////////////////////////////////////////////////////////
 
 private:
     static Stream *espSerial;

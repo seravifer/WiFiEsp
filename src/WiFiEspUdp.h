@@ -21,20 +21,19 @@ along with The Arduino WiFiEsp library.  If not, see
 
 #include <Udp.h>
 
-#define UDP_TX_PACKET_MAX_SIZE 24
 
 class WiFiEspUDP : public UDP {
 
 private:
-    uint8_t _sock;  // socket ID for Wiz5100
-    uint16_t _port; // local port to listen on
+    uint8_t _sock;
+    uint16_t _port;
 
     uint16_t _remotePort;
     char _remoteHost[30];
 
 
 public:
-    WiFiEspUDP(); // Constructor
+    WiFiEspUDP();
 
     /**
      * Initialize UDPServer, start listening on specified port.
@@ -55,14 +54,12 @@ public:
     virtual void stop();
 
     /**
-     * Sending UDP packets
      * Start building up a packet to send to the remote host specific in ip and port
      * Returns 1 if successful, 0 if there was a problem with the supplied IP address or port
      */
     virtual int beginPacket(IPAddress ip, uint16_t port);
 
     /**
-     * Sending UDP packets
      * Start building up a packet to send to the remote host specific in host and port
      * Returns 1 if successful, 0 if there was a problem resolving the hostname or port
      */
@@ -71,6 +68,7 @@ public:
     /**
      * Finish off this packet and send it
      * Returns 1 if the packet was sent successfully, 0 if there was an error
+     * No At command
      */
     virtual int endPacket();
 
@@ -83,8 +81,6 @@ public:
      * Write size bytes from buffer into the packet
      */
     virtual size_t write(const uint8_t *buffer, size_t size);
-
-    using Print::write;
 
     /**
      * Start processing the next available incoming packet
@@ -111,6 +107,7 @@ public:
 
     /**
      * Return the next byte from the current packet without moving on to the next byte
+     * No At command
      */
     virtual int peek();
 
@@ -128,6 +125,8 @@ public:
      * Return the port of the host who sent the current incoming packet
      */
     virtual uint16_t remotePort();
+
+    using Print::write;
 
 
     friend class WiFiEspServer;

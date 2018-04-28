@@ -22,7 +22,8 @@ along with The Arduino WiFiEsp library.  If not, see
 
 RingBuffer::RingBuffer(unsigned int size) {
     _size = size;
-    ringBuf = new char[size + 1]; // add one char to terminate the string
+    // add one char to terminate the string
+    ringBuf = new char[size + 1];
     ringBufEnd = &ringBuf[size];
     init();
 }
@@ -44,6 +45,7 @@ void RingBuffer::push(char c) {
     if (ringBufP >= ringBufEnd)
         ringBufP = ringBuf;
 }
+
 
 bool RingBuffer::endsWith(const char *str) {
     int findStrLen = strlen(str);
@@ -67,6 +69,7 @@ bool RingBuffer::endsWith(const char *str) {
 
     return true;
 }
+
 
 void RingBuffer::getStr(char *destination, unsigned int skipChars) {
     int len = ringBufP - ringBuf - skipChars;

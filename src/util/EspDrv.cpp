@@ -19,8 +19,8 @@ along with The Arduino WiFiEsp library.  If not, see
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 
-#include "debug.h"
 #include "EspDrv.h"
+#include "debug.h"
 
 
 #define NUMESPTAGS 5
@@ -88,8 +88,10 @@ void EspDrv::wifiDriverInit(Stream *espSerial) {
 
     reset();
 
+    // check firmware version
     getFwVersion();
 
+    // prints a warning message if the firmware is not 1.X or 2.X
     if ((fwVersion[0] != '1' and fwVersion[0] != '2') or
         fwVersion[1] != '.') {
         LOGWARN1(F("Warning: Unsupported firmware"), fwVersion);
@@ -98,6 +100,7 @@ void EspDrv::wifiDriverInit(Stream *espSerial) {
         LOGINFO1(F("Initilization successful -"), fwVersion);
     }
 }
+
 
 void EspDrv::reset() {
     LOGDEBUG(F("> reset"));
@@ -128,6 +131,7 @@ void EspDrv::reset() {
     delay(200);
 }
 
+
 bool EspDrv::wifiConnect(const char *ssid, const char *passphrase) {
     LOGDEBUG(F("> wifiConnect"));
 
@@ -151,6 +155,7 @@ bool EspDrv::wifiConnect(const char *ssid, const char *passphrase) {
 
     return false;
 }
+
 
 bool EspDrv::wifiStartAP(const char *ssid, const char *pwd, uint8_t channel, uint8_t enc, uint8_t espMode) {
     LOGDEBUG(F("> wifiStartAP"));
@@ -182,6 +187,7 @@ bool EspDrv::wifiStartAP(const char *ssid, const char *pwd, uint8_t channel, uin
     LOGINFO1(F("Access point started"), ssid);
     return true;
 }
+
 
 int8_t EspDrv::disconnect() {
     LOGDEBUG(F("> disconnect"));
@@ -280,7 +286,7 @@ uint8_t EspDrv::getConnectionStatus() {
     return WL_IDLE_STATUS;
 }
 
-uint8_t EspDrv::getClientState(uint8_t sock) {
+bool EspDrv::getClientState(uint8_t sock) {
     LOGDEBUG1(F("> getClientState"), sock);
 
     char findBuf[20];
@@ -321,6 +327,7 @@ uint8_t *EspDrv::getMacAddress() {
     return _mac;
 }
 
+
 void EspDrv::getIpAddress(IPAddress &ip) {
     LOGDEBUG(F("> getIpAddress"));
 
@@ -360,6 +367,7 @@ void EspDrv::getIpAddressAP(IPAddress &ip) {
         ip = _localIp;
     }
 }
+
 
 char *EspDrv::getCurrentSSID() {
     LOGDEBUG(F("> getCurrentSSID"));
@@ -409,6 +417,7 @@ int32_t EspDrv::getCurrentRSSI() {
 
     return ret;
 }
+
 
 uint8_t EspDrv::getScanNetworks() {
     uint8_t ssidListNum = 0;
@@ -515,6 +524,7 @@ char *EspDrv::getFwVersion() {
     return fwVersion;
 }
 
+
 bool EspDrv::ping(const char *host) {
     LOGDEBUG(F("> ping"));
 
@@ -525,6 +535,8 @@ bool EspDrv::ping(const char *host) {
 
     return false;
 }
+
+
 
 // Start server TCP on port specified
 bool EspDrv::startServer(uint16_t port, uint8_t sock) {
@@ -561,6 +573,7 @@ bool EspDrv::startClient(const char *host, uint16_t port, uint8_t sock, uint8_t 
     return ret == TAG_OK;
 }
 
+
 // Start server TCP on port specified
 void EspDrv::stopClient(uint8_t sock) {
     LOGDEBUG1(F("> stopClient"), sock);
@@ -568,14 +581,18 @@ void EspDrv::stopClient(uint8_t sock) {
     int ret = sendCmd(F("AT+CIPCLOSE=%d"), 4000, sock);
 }
 
+
 uint8_t EspDrv::getServerState(uint8_t sock) {
     return 0;
 }
 
 
+
 ////////////////////////////////////////////////////////////////////////////
 // TCP/IP functions
 ////////////////////////////////////////////////////////////////////////////
+
+
 
 uint16_t EspDrv::availData(uint8_t connId) {
     //LOGDEBUG(bufPos);
@@ -587,6 +604,7 @@ uint16_t EspDrv::availData(uint8_t connId) {
         else if (_connId == 0)
             return _bufPos;
     }
+
 
     int bytes = espSerial->available();
 
@@ -620,12 +638,15 @@ uint16_t EspDrv::availData(uint8_t connId) {
                 return _bufPos;
         }
     }
+
     return 0;
 }
+
 
 bool EspDrv::getData(uint8_t connId, uint8_t *data, bool peek, bool *connClose) {
     if (connId != _connId)
         return false;
+
 
     // see Serial.timedRead
 
@@ -703,6 +724,7 @@ int EspDrv::getDataBuf(uint8_t connId, uint8_t *buf, uint16_t bufSize) {
 
     return bufSize;
 }
+
 
 bool EspDrv::sendData(uint8_t sock, const uint8_t *data, uint16_t len) {
     LOGDEBUG2(F("> sendData:"), sock, len);
@@ -789,6 +811,7 @@ bool EspDrv::sendDataUdp(uint8_t sock, const char *host, uint16_t port, const ui
     return true;
 }
 
+
 void EspDrv::getRemoteIpAddress(IPAddress &ip) {
     ip = _remoteIp;
 }
@@ -801,6 +824,7 @@ uint16_t EspDrv::getRemotePort() {
 ////////////////////////////////////////////////////////////////////////////
 // Utility functions
 ////////////////////////////////////////////////////////////////////////////
+
 
 
 /*
@@ -870,6 +894,7 @@ bool EspDrv::sendCmdGet(const __FlashStringHelper *cmd, const __FlashStringHelpe
     return sendCmdGet(cmd, _startTag, _endTag, outStr, outStrLen);
 }
 
+
 /*
 * Sends the AT command and returns the id of the TAG.
 * Return -1 if no tag is found.
@@ -890,18 +915,19 @@ int EspDrv::sendCmd(const __FlashStringHelper *cmd, int timeout) {
     return idx;
 }
 
+
 /*
- * Sends the AT command and returns the id of the TAG.
- * The additional arguments are formatted into the command using sprintf.
- * Return -1 if no tag is found.
- */
+* Sends the AT command and returns the id of the TAG.
+* The additional arguments are formatted into the command using sprintf.
+* Return -1 if no tag is found.
+*/
 int EspDrv::sendCmd(const __FlashStringHelper *cmd, int timeout, ...) {
     char cmdBuf[CMD_BUFFER_SIZE];
 
     va_list args;
-    va_start(args, timeout);
+    va_start (args, timeout);
     vsnprintf_P(cmdBuf, CMD_BUFFER_SIZE, (char *) cmd, args);
-    va_end(args);
+    va_end (args);
 
     espEmptyBuf();
 
@@ -918,12 +944,11 @@ int EspDrv::sendCmd(const __FlashStringHelper *cmd, int timeout, ...) {
     return idx;
 }
 
-/*
- * Read from serial until one of the tags is found
- * Returns:
- *   the index of the tag found in the ESPTAGS array
- *   -1 if no tag was found (timeout)
- */
+
+// Read from serial until one of the tags is found
+// Returns:
+//   the index of the tag found in the ESPTAGS array
+//   -1 if no tag was found (timeout)
 int EspDrv::readUntil(int timeout, const char *tag, bool findTags) {
     ringBuf.reset();
 
@@ -961,6 +986,7 @@ int EspDrv::readUntil(int timeout, const char *tag, bool findTags) {
     return ret;
 }
 
+
 void EspDrv::espEmptyBuf(bool warn) {
     char c;
     int i = 0;
@@ -975,6 +1001,7 @@ void EspDrv::espEmptyBuf(bool warn) {
         LOGDEBUG1(F("Dirty characters in the serial buffer! >"), i);
     }
 }
+
 
 // copied from Serial::timedRead
 int EspDrv::timedRead() {
